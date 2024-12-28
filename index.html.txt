@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gym Timer</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+
+        #container {
+            text-align: center;
+        }
+
+        #start-button {
+            padding: 15px 30px;
+            font-size: 24px;
+            color: white;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #start-button:hover {
+            background-color: #0056b3;
+        }
+
+        #timer-screen {
+            display: none;
+            width: 100%;
+            height: 100vh;
+            color: white;
+            font-size: 48px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            flex-direction: column;
+        }
+
+        .green {
+            background-color: green;
+        }
+
+        .red {
+            background-color: red;
+        }
+
+        .blue {
+            background-color: blue;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="container">
+        <button id="start-button">Comenzar</button>
+        <div id="timer-screen">
+            <div id="timer-text">10</div>
+        </div>
+    </div>
+
+    <script>
+        const startButton = document.getElementById('start-button');
+        const timerScreen = document.getElementById('timer-screen');
+        const timerText = document.getElementById('timer-text');
+
+        const stages = [
+            { color: 'green', duration: 10 }, // Preparation stage
+            { color: 'red', duration: 20 },  // Intense stage
+            { color: 'blue', duration: 15 }  // Recovery stage
+        ];
+
+        let currentStage = 0;
+
+        function startTimer() {
+            startButton.style.display = 'none';
+            timerScreen.style.display = 'flex';
+            runStage();
+        }
+
+        function runStage() {
+            if (currentStage < stages.length) {
+                const stage = stages[currentStage];
+                timerScreen.className = stage.color;
+                let timeRemaining = stage.duration;
+
+                const interval = setInterval(() => {
+                    timerText.textContent = timeRemaining;
+                    if (timeRemaining === 0) {
+                        clearInterval(interval);
+                        currentStage++;
+                        runStage();
+                    }
+                    timeRemaining--;
+                }, 1000);
+            } else {
+                endTimer();
+            }
+        }
+
+        function endTimer() {
+            timerScreen.style.display = 'none';
+            startButton.style.display = 'block';
+            startButton.textContent = 'Reiniciar';
+            currentStage = 0;
+        }
+
+        startButton.addEventListener('click', startTimer);
+    </script>
+</body>
+</html>
